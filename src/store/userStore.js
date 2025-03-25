@@ -13,9 +13,13 @@ const useUserStore = create(persist((set, get) => ({
         return rs.data
 
     },
-    updateUser: async (userId, input) => {
+    updateUser: async (userId, input,token) => {
 
-        const rs = await axios.put(`http://localhost:8888/auth/update/${userId}`, input)
+        const rs = await axios.put(`http://localhost:8888/auth/update/${userId}`, input,{
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }}
+        )
 console.log('rs.data.user', rs.data.user)
         set({user: rs.data.user })
         return rs.data.user

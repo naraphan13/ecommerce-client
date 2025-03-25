@@ -1,9 +1,10 @@
 import axios from "axios";
+import { useNavigate } from "react-router";
+import { toast } from "react-toastify";
 import { create } from "zustand";
-import { persist } from "zustand/middleware";
+import { createJSONStorage, persist } from "zustand/middleware";
 
 const useProductStore = create(persist((set, get) => ({
-
     products: [],
     product: null,
     carts: [],
@@ -11,14 +12,17 @@ const useProductStore = create(persist((set, get) => ({
     currentProduct: null,
     loading: false,
     createProduct: async (body, token, user) => {
-
+        
+        
         const rs = await axios.post('http://localhost:8888/product/create', body, {
             headers: { Authorization: `Bearer ${token}` }
         })
-        set(state => ({
-            posts: [{ ...rs.data.result, name: [], description: [] }, ...state.posts]
 
-        }))
+        console.log('rs', rs)
+        // set(state => ({
+        //     posts: [{ ...rs.data.result, name: [], description: [] }, ...state.posts]
+
+        // }))
     },
     getAllProduct: async (token) => {
 
@@ -62,8 +66,17 @@ const useProductStore = create(persist((set, get) => ({
         return rs.data.product
 
     },
-    createOrder: async (token) => {
+    createOrder: async (token,navigate) => {
         const { cart } = get();
+
+
+        if (!token) {
+            toast.error("Please login first.");
+            navigate('/login')
+            return;
+          }
+
+
 
         if (cart.length === 0) {
             toast.error("Your cart is empty!");
@@ -86,9 +99,11 @@ const useProductStore = create(persist((set, get) => ({
                 headers: { Authorization: `Bearer ${token}` }
             });
 
-            console.log("Order Created:", response.data);
+            console.log("Order Created:", response.data.order);
             set({ cart: [] }); // ✅ ล้างตะกร้าหลังจากสร้างออเดอร์สำเร็จ
             toast.success("Order created successfully!");
+            return response.data.order
+            // navigate('/order')
         } catch (error) {
             toast.error("Failed to create order.");
             console.error("Error creating order:", error);
@@ -134,7 +149,8 @@ const useProductStore = create(persist((set, get) => ({
 
 
 }), {
-    name: 'state'
+    name: 'product',
+    storage: createJSONStorage(() => localStorage)
 }))
 
 

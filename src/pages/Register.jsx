@@ -1,5 +1,6 @@
 import axios from 'axios'
 import React, { useState } from 'react'
+import { useNavigate } from 'react-router'
 import { toast } from 'react-toastify'
 
 const initInput = {
@@ -30,6 +31,7 @@ function Register() {
 
     }
 
+    const navigate = useNavigate()
 
     const hdlRegister = async e => {
         try {
@@ -55,8 +57,7 @@ function Register() {
 
             toast.success('Register successful')
 
-
-
+navigate('/login')
 
 
 

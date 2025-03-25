@@ -12,6 +12,8 @@ import AllProduct from '../pages/AllProducts'
 import UpdateProduct from '../pages/UpdateProduct'
 import Cart from '../pages/Cart'
 import Order from '../pages/order'
+import Home from '../pages/Home'
+import CheckoutComplete from '../pages/CheckoutComplete'
 
 
 
@@ -24,7 +26,7 @@ const userRouter = createBrowserRouter([
             {
                 index: true, element: <>
 
-
+                <Home/>
 
 
 
@@ -37,6 +39,7 @@ const userRouter = createBrowserRouter([
             { path: 'profile', element: <Profile /> },
             { path: 'products', element: <AllProduct /> },
             { path: 'cart', element: <Cart /> },
+            {path: "/checkout-complete/:session", element: <CheckoutComplete />},
             { path: 'order', element: <Order /> },
             { path: 'createproduct', element: <CreateProduct /> },
             { path: 'products/updateproduct', element: <UpdateProduct /> },
@@ -58,7 +61,7 @@ function AppRouter() {
 
 
     return (
-        <RouterProvider key={user?.id} router={finalRouter} />
+        <RouterProvider key={user?.id} router={userRouter} />
     )
 }
 
